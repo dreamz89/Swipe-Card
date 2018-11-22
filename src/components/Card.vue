@@ -2,8 +2,11 @@
   <div class="card" ref="card"
     :style="{ zIndex: zIndex }"
     @mousedown="onmousedown"
+    @touchstart="onmousedown"
     @mouseup="onmouseup"
+    @touchend="onmouseup"
     @mousemove="onmousemove"
+    @touchmove="onmousemove"
     @transitionend="ontransitionend">
     <p>{{ text }}</p>
     <p>{{ index }}</p>
@@ -23,16 +26,11 @@ export default {
       chosen: false
     }
   },
-  // mounted(){
-  //   document.addEventListener('mousedown', e => this.onmousedown(e))
-  //   document.addEventListener('mouseup', e => this.onmouseup(e))
-  //   document.addEventListener('mousemove', e => this.onmousemove(e))
-  // },
   methods: {
     onmousedown(e){
       e.preventDefault()
       this.grabcard = true
-      this.startX = e.clientX
+      this.startX = e.pageX || e.touches[0].pageX
     },
     onmouseup(){
       const card = this.$refs.card
@@ -62,7 +60,7 @@ export default {
       e.preventDefault()
       if (this.grabcard){
         if (this.startX !== e.pageX) {
-          this.moveDistance = e.pageX - this.startX
+          this.moveDistance = (e.pageX || e.touches[0].pageX) - this.startX
 
           if (this.moveDistance < 0) {
             this.text = this.answers[0]
