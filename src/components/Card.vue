@@ -1,13 +1,6 @@
 <template>
-  <div class="card" ref="card"
-    :style="{ zIndex: zIndex }"
-    @mousedown="onmousedown"
-    @touchstart="onmousedown"
-    @mouseup="onmouseup"
-    @touchend="onmouseup"
-    @mousemove="onmousemove"
-    @touchmove="onmousemove"
-    @transitionend="ontransitionend">
+  <div class="card"
+    :style="{ zIndex: zIndex }">
     <p>{{ text }}</p>
     <p>{{ index }}</p>
   </div>
@@ -15,67 +8,10 @@
 
 <script>
 export default {
-  props: ['total', 'answers', 'index'],
+  props: ['total', 'text', 'index'],
   data(){
     return {
-      grabcard: false,
-      startX: 0,
-      text: null,
-      zIndex: this.total - this.index,
-      moveDistance: 0,
-      chosen: false
-    }
-  },
-  methods: {
-    onmousedown(e){
-      e.preventDefault()
-      this.grabcard = true
-      this.startX = e.pageX || e.touches[0].pageX
-    },
-    onmouseup(){
-      const card = this.$refs.card
-
-      if (Math.abs(this.moveDistance) < 20) {
-        card.classList.add('reset')
-      }
-
-      if (this.moveDistance >= 20) {
-        card.classList.add('toRight')
-        this.chosen = true
-        this.$emit('cardChosen', this.index)
-      } else if (this.moveDistance <= -20) {
-        card.classList.add('toLeft')
-        this.chosen = true
-        this.$emit('cardChosen')
-      }
-
-      this.grabcard = false
-      card.style.transform = ""
-
-      setTimeout(() => {
-        card.classList.remove("toLeft", "toRight", "reset")
-      }, 300)
-    },
-    onmousemove(e){
-      e.preventDefault()
-      if (this.grabcard){
-        if (this.startX !== e.pageX) {
-          this.moveDistance = (e.pageX || e.touches[0].pageX) - this.startX
-
-          if (this.moveDistance < 0) {
-            this.text = this.answers[0]
-          } else {
-            this.text = this.answers[1]
-          }
-
-          this.$refs.card.style.transform = "translateX(" + this.moveDistance + "px) rotate(" + this.moveDistance / 10 + "deg)"
-        }
-      }
-    },
-    ontransitionend(){
-      if (this.chosen){
-        this.$refs.card.style.display = "none"
-      }
+      zIndex: this.total - this.index
     }
   }
 }

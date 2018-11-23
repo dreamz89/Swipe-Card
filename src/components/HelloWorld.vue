@@ -1,14 +1,20 @@
 <template>
   <div>
     <p>{{ cardsInfo[cardNumber].question }}</p>
-    <div class="game">
+    <div class="game"
+      @mousedown="onmousedown"
+      @touchstart="onmousedown"
+      @mousemove="onmousemove"
+      @touchmove="onmousemove"
+      @mouseup="onmouseup"
+      @touchend="onmouseup"
+      @transitionend="ontransitionend">
       <Card
         v-for="(card, index) in cardsInfo"
         :key="index"
         :total="cardsInfo.length"
-        :answers="card.answers"
+        :text="text"
         :index="index"
-        @cardChosen="cardNumber < cardsInfo.length - 1 ? cardNumber += 1 : cardNumber"
       ></Card>
     </div>
   </div>
@@ -30,7 +36,73 @@ export default {
       }, {
         question: 'Double confirm?',
         answers: ['Yes', 'No']
-      }]
+      }],
+      cardsArray: [],
+      grabcard: false,
+      startX: 0,
+      text: null,
+      moveDistance: 0,
+      chosen: false
+    }
+  },
+  mounted() {
+    var cards = document.querySelectorAll('.card')
+    this.cardsArray = Array.prototype.slice.call(cards)
+  },
+  methods: {
+    onmousedown(e) {
+      e.preventDefault()
+      this.grabcard = true
+      this.startX = e.pageX || e.touches[0].pageX
+    },
+    onmousemove(e) {
+      e.preventDefault()
+      const activeCard = this.cardsArray[this.cardNumber]
+
+      if (this.grabcard){
+        if (this.startX !== e.pageX) {
+          this.moveDistance = (e.pageX || e.touches[0].pageX) - this.startX
+
+          if (this.moveDistance < 0) {
+            this.text = this.cardsInfo[this.cardNumber].answers[0]
+          } else {
+            this.text = this.cardsInfo[this.cardNumber].answers[1]
+          }
+
+          activeCard.style.transform = "translateX(" + this.moveDistance + "px) rotate(" + this.moveDistance / 10 + "deg)"
+        }
+      }
+    },
+    onmouseup() {
+      const activeCard = this.cardsArray[this.cardNumber]
+
+      if (Math.abs(this.moveDistance) < 20) {
+        activeCard.classList.add('reset')
+        this.text = null
+      }
+
+      if (this.moveDistance >= 20) {
+        activeCard.classList.add('toRight')
+        this.chosen = true
+      } else if (this.moveDistance <= -20) {
+        activeCard.classList.add('toLeft')
+        this.chosen = true
+      }
+
+      this.grabcard = false
+      activeCard.style.transform = ""
+
+      setTimeout(() => {
+        activeCard.classList.remove("toLeft", "toRight", "reset")
+      }, 300)
+    },
+    ontransitionend() {
+      if (this.chosen){
+        this.cardsArray[this.cardNumber].style.display = "none"
+        this.cardNumber < this.cardsInfo.length - 1 ? this.cardNumber += 1 : null
+      }
+
+      this.chosen = false
     }
   }
 }
