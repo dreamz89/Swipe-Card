@@ -96,10 +96,12 @@ export default {
         activeCard.classList.remove("toLeft", "toRight", "reset")
       }, 300)
     },
-    ontransitionend() {
+    ontransitionend(e) {
       if (this.chosen){
         this.cardsArray[this.cardNumber].style.display = "none"
         this.cardNumber < this.cardsInfo.length - 1 ? this.cardNumber += 1 : null
+        const innercards = document.querySelectorAll('.innercard')
+        Array.prototype.slice.call(innercards)[this.cardNumber].classList.add('is-flipped')
       }
 
       this.chosen = false

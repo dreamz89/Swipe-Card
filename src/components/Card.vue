@@ -1,8 +1,12 @@
 <template>
-  <div class="card"
-    :style="{ zIndex: zIndex }">
-    <p>{{ text }}</p>
-    <p>{{ index }}</p>
+  <div class="card" :style="{ zIndex: zIndex }">
+    <div class="innercard" :class="index === 0 ? 'is-flipped' : null">
+      <div class="card__face card__face--front"></div>
+      <div class="card__face card__face--back">
+        <p>{{ text }}</p>
+        <p>{{ index }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -17,17 +21,15 @@ export default {
 }
 </script>
 
+<!-- https://3dtransforms.desandro.com/card-flip -->
 <style>
   .card {
     position: absolute;
     height: 100%;
     width: 100%;
     border-radius: 15px;
-    background-color: lightblue;
     cursor: move;
     cursor: grab;
-    transform-style: preserve-3d;
-    transform-origin: center 200%;
   }
   .card.reset {
     transition: transform 0.3s;
@@ -42,9 +44,33 @@ export default {
     transform: translateX(300px) rotate(15deg) !important;
   }
   .card p {
-    font-size: 36px
+    font-size: 36px;
   }
   .card:active {
     cursor: grabbing;
+  }
+  .innercard {
+    height: 100%;
+    width: 100%;
+    transition: transform 1s;
+    position: relative;
+    transform-style: preserve-3d;
+  }
+  .card__face {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-radius: 15px;
+    backface-visibility: hidden;
+  }
+  .card__face--front {
+    background-color: lightblue;
+  }
+  .card__face--back {
+    background-color: lightgreen;
+    transform: rotateY(180deg);
+  }
+  .innercard.is-flipped {
+    transform: rotateY(180deg);
   }
 </style>
