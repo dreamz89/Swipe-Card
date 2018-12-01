@@ -15,6 +15,7 @@
         :total="cardsInfo.length"
         :answer="answer"
         :photo="cardsInfo[index].photo"
+        :explanation="cardsInfo[index].explanation"
         :index="index"
       ></Card>
     </div>
@@ -31,15 +32,33 @@ export default {
       cardsInfo: [{
         question: 'Should we do a Tinder-style swipe project?',
         answers: ['Yes', 'No'],
-        photo: 'art.jpg'
+        photo: 'art.jpg',
+        explanation: null
+      }, {
+        question: 'Should we do a Tinder-style swipe project?',
+        answers: null,
+        photo: 'art.jpg',
+        explanation: 'It is interactive for the user.'
       }, {
         question: 'Are you sure?',
         answers: ['Yes', 'No'],
-        photo: 'art.jpg'
+        photo: 'art.jpg',
+        explanation: null
+      }, {
+        question: 'Are you sure?',
+        answers: null,
+        photo: 'art.jpg',
+        explanation: 'You must be sure'
       }, {
         question: 'Double confirm?',
         answers: ['Yes', 'No'],
-        photo: 'art.jpg'
+        photo: 'art.jpg',
+        explanation: null
+      }, {
+        question: 'Double confirm?',
+        answers: null,
+        photo: 'art.jpg',
+        explanation: 'Okay let\'s do it!'
       }],
       cardsArray: [],
       grabcard: false,
@@ -116,10 +135,14 @@ export default {
 </script>
 
 <style>
+  body {
+    margin: 0
+  }
   .game {
     position: relative;
     height: 400px;
-    width: 400px;
+    max-width: 400px;
+    width: 90%;
     margin: 0 auto;
     border-radius: 15px;
   }

@@ -3,8 +3,13 @@
     <div class="innercard" :class="index === 0 ? 'is-flipped' : null">
       <div class="card__face card__face--front"></div>
       <div class="card__face card__face--back">
-        <p>{{ answer }}</p>
-        <img :src="photo"/>
+        <div v-if="index % 2 === 1">
+          <p>{{ explanation }}</p>
+        </div>
+        <div v-if="index % 2 === 0">
+          <p>{{ answer }}</p>
+          <img :src="photo"/>
+        </div>
       </div>
     </div>
   </div>
@@ -12,7 +17,7 @@
 
 <script>
 export default {
-  props: ['total', 'answer', 'photo', 'index'],
+  props: ['total', 'answer', 'photo', 'explanation', 'index'],
   data(){
     return {
       zIndex: this.total - this.index
