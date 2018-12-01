@@ -13,7 +13,8 @@
         v-for="(card, index) in cardsInfo"
         :key="index"
         :total="cardsInfo.length"
-        :text="text"
+        :answer="answer"
+        :photo="cardsInfo[index].photo"
         :index="index"
       ></Card>
     </div>
@@ -29,18 +30,21 @@ export default {
       cardNumber: 0,
       cardsInfo: [{
         question: 'Should we do a Tinder-style swipe project?',
-        answers: ['Yes', 'No']
+        answers: ['Yes', 'No'],
+        photo: 'art.jpg'
       }, {
         question: 'Are you sure?',
-        answers: ['Yes', 'No']
+        answers: ['Yes', 'No'],
+        photo: 'art.jpg'
       }, {
         question: 'Double confirm?',
-        answers: ['Yes', 'No']
+        answers: ['Yes', 'No'],
+        photo: 'art.jpg'
       }],
       cardsArray: [],
       grabcard: false,
       startX: 0,
-      text: null,
+      answer: 'Left or right',
       moveDistance: 0,
       chosen: false
     }
@@ -64,9 +68,9 @@ export default {
           this.moveDistance = (e.pageX || e.touches[0].pageX) - this.startX
 
           if (this.moveDistance < 0) {
-            this.text = this.cardsInfo[this.cardNumber].answers[0]
+            this.answer = this.cardsInfo[this.cardNumber].answers[0]
           } else {
-            this.text = this.cardsInfo[this.cardNumber].answers[1]
+            this.answer = this.cardsInfo[this.cardNumber].answers[1]
           }
 
           activeCard.style.transform = "translateX(" + this.moveDistance + "px) rotate(" + this.moveDistance / 10 + "deg)"
@@ -78,7 +82,7 @@ export default {
 
       if (Math.abs(this.moveDistance) < 20) {
         activeCard.classList.add('reset')
-        this.text = null
+        this.answer = null
       }
 
       if (this.moveDistance >= 20) {
@@ -94,12 +98,13 @@ export default {
 
       setTimeout(() => {
         activeCard.classList.remove("toLeft", "toRight", "reset")
-      }, 300)
+      }, 350)
     },
-    ontransitionend(e) {
+    ontransitionend() {
       if (this.chosen){
         this.cardsArray[this.cardNumber].style.display = "none"
         this.cardNumber < this.cardsInfo.length - 1 ? this.cardNumber += 1 : null
+        this.answer = 'Left or right'
         const innercards = document.querySelectorAll('.innercard')
         Array.prototype.slice.call(innercards)[this.cardNumber].classList.add('is-flipped')
       }

@@ -3,8 +3,8 @@
     <div class="innercard" :class="index === 0 ? 'is-flipped' : null">
       <div class="card__face card__face--front"></div>
       <div class="card__face card__face--back">
-        <p>{{ text }}</p>
-        <p>{{ index }}</p>
+        <p>{{ answer }}</p>
+        <img :src="photo"/>
       </div>
     </div>
   </div>
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  props: ['total', 'text', 'index'],
+  props: ['total', 'answer', 'photo', 'index'],
   data(){
     return {
       zIndex: this.total - this.index
@@ -45,6 +45,9 @@ export default {
   }
   .card p {
     font-size: 36px;
+  }
+  .card img {
+    width: 80%;
   }
   .card:active {
     cursor: grabbing;
